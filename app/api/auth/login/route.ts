@@ -36,9 +36,8 @@ export async function POST(request: Request) {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        balance: user.balance ?? 0,
         address: user.address,
-        studentId: user.studentId,
-        className: user.className,
       },
     });
   } catch (error) {

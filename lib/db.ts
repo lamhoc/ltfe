@@ -17,9 +17,8 @@ db.exec(`
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     phone TEXT DEFAULT '',
+    balance INTEGER DEFAULT 0,
     address TEXT DEFAULT '',
-    studentId TEXT DEFAULT '',
-    className TEXT DEFAULT '',
     createdAt TEXT NOT NULL
   );
 `);
@@ -30,9 +29,8 @@ export type UserRecord = {
   email: string;
   password: string;
   phone: string;
+  balance: number;
   address: string;
-  studentId: string;
-  className: string;
   createdAt: string;
 };
 
@@ -47,7 +45,7 @@ export function getUserByEmail(email: string): UserRecord | undefined {
 export function getUserById(id: number): UserRecord | undefined {
   return db
     .prepare(
-      `SELECT id, name, email, password, phone, address, studentId, className, createdAt FROM users WHERE id = ? LIMIT 1`
+      `SELECT id, name, email, password, phone, balance, address, createdAt FROM users WHERE id = ? LIMIT 1`
     )
     .get(id) as UserRecord | undefined;
 }
@@ -55,7 +53,7 @@ export function getUserById(id: number): UserRecord | undefined {
 export function getPublicUserById(id: number): Omit<UserRecord, "password"> | undefined {
   return db
     .prepare(
-      `SELECT id, name, email, phone, address, studentId, className, createdAt FROM users WHERE id = ? LIMIT 1`
+      `SELECT id, name, email, phone, balance, address, createdAt FROM users WHERE id = ? LIMIT 1`
     )
     .get(id) as Omit<UserRecord, "password"> | undefined;
 }
@@ -66,23 +64,21 @@ export function createUser({
   password,
   phone = "",
   address = "",
-  studentId = "",
-  className = "",
+  balance = 0,
 }: {
   name: string;
   email: string;
   password: string;
   phone?: string;
   address?: string;
-  studentId?: string;
-  className?: string;
+  balance?: number;
 }) {
   const now = new Date().toISOString();
   const result = db
     .prepare(
-      `INSERT INTO users (name, email, password, phone, address, studentId, className, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO users (name, email, password, phone, balance, address, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)`
     )
-    .run(name.trim(), email.trim().toLowerCase(), password, phone.trim(), address.trim(), studentId.trim(), className.trim(), now);
+    .run(name.trim(), email.trim().toLowerCase(), password, phone.trim(), balance, address.trim(), now);
 
   return Number(result.lastInsertRowid);
 }
@@ -93,8 +89,7 @@ export function updateUserById(
     name?: string;
     phone?: string;
     address?: string;
-    studentId?: string;
-    className?: string;
+    balance?: number;
   },
 ) {
   const existing = db
@@ -107,13 +102,12 @@ export function updateUserById(
     name: payload.name ?? existing.name,
     phone: payload.phone ?? existing.phone,
     address: payload.address ?? existing.address,
-    studentId: payload.studentId ?? existing.studentId,
-    className: payload.className ?? existing.className,
+    balance: payload.balance ?? existing.balance,
   };
 
   db.prepare(
-    `UPDATE users SET name = ?, phone = ?, address = ?, studentId = ?, className = ? WHERE id = ?`
-  ).run(next.name, next.phone, next.address, next.studentId, next.className, id);
+    `UPDATE users SET name = ?, phone = ?, address = ?, balance = ? WHERE id = ?`
+  ).run(next.name, next.phone, next.address, next.balance, id);
 
   return getUserById(id);
 }

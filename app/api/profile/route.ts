@@ -32,18 +32,17 @@ export async function PUT(request: Request) {
   const name = String(body.name ?? "").trim();
   const phone = String(body.phone ?? "").trim();
   const address = String(body.address ?? "").trim();
-  const studentId = String(body.studentId ?? "").trim();
-  const className = String(body.className ?? "").trim();
 
   if (!name) {
     return Response.json({ error: "Tên không được để trống." }, { status: 400 });
   }
 
-  const updated = updateUserById(userId, { name, phone, address, studentId, className });
+  const updated = updateUserById(userId, { name, phone, address });
 
   if (!updated) {
     return Response.json({ error: "Không tìm thấy người dùng." }, { status: 404 });
   }
 
-  return Response.json({ message: "Cập nhật thông tin thành công.", user: updated });
+  const publicUser = getPublicUserById(userId);
+  return Response.json({ message: "Cập nhật thông tin thành công.", user: publicUser });
 }

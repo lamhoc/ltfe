@@ -30,7 +30,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/profile');
+      router.push('/dashboard');
       router.refresh();
     } catch (err) {
       setError('Không thể kết nối máy chủ. Vui lòng thử lại.');

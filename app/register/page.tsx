@@ -12,9 +12,7 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
     phone: '',
-    address: '',
-    studentId: '',
-    className: '',
+    balance: '0',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,10 +27,11 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      const payload = { ...form, balance: Number(form.balance || 0) };
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -42,7 +41,7 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push('/profile');
+      router.push('/dashboard');
       router.refresh();
     } catch (err) {
       setError('Không thể thực hiện đăng ký.');
@@ -63,13 +62,13 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2">
           <div className="md:col-span-2">
-            <label className="mb-2 block text-sm font-medium text-slate-700">Họ tên</label>
-            <input value={form.name} onChange={(e) => onChange('name', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" required />
+            <label className="mb-2 block text-sm font-medium text-slate-700">Tên đăng nhập (email)</label>
+            <input value={form.email} onChange={(e) => onChange('email', e.target.value)} type="email" className="w-full rounded-xl border border-slate-300 px-4 py-3" required />
           </div>
 
           <div className="md:col-span-2">
-            <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
-            <input type="email" value={form.email} onChange={(e) => onChange('email', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" required />
+            <label className="mb-2 block text-sm font-medium text-slate-700">Họ tên</label>
+            <input value={form.name} onChange={(e) => onChange('name', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" required />
           </div>
 
           <div>
@@ -88,18 +87,8 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">MSSV</label>
-            <input value={form.studentId} onChange={(e) => onChange('studentId', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="mb-2 block text-sm font-medium text-slate-700">Địa chỉ</label>
-            <input value={form.address} onChange={(e) => onChange('address', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="mb-2 block text-sm font-medium text-slate-700">Lớp</label>
-            <input value={form.className} onChange={(e) => onChange('className', e.target.value)} className="w-full rounded-xl border border-slate-300 px-4 py-3" />
+            <label className="mb-2 block text-sm font-medium text-slate-700">Số dư khởi tạo (VND)</label>
+            <input value={form.balance} onChange={(e) => onChange('balance', e.target.value)} type="number" className="w-full rounded-xl border border-slate-300 px-4 py-3" />
           </div>
 
           {error ? (

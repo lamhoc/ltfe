@@ -13,8 +13,7 @@ export async function POST(request: Request) {
     const confirmPassword = String(body.confirmPassword ?? "");
     const phone = String(body.phone ?? "").trim();
     const address = String(body.address ?? "").trim();
-    const studentId = String(body.studentId ?? "").trim();
-    const className = String(body.className ?? "").trim();
+    const balance = Number(body.balance ?? 0);
 
     if (!name || !email || !password) {
       return Response.json({ error: "Vui lòng nhập đầy đủ thông tin." }, { status: 400 });
@@ -42,8 +41,7 @@ export async function POST(request: Request) {
       password: hashPassword(password),
       phone,
       address,
-      studentId,
-      className,
+      balance,
     });
 
     const cookieStore = await cookies();
@@ -62,9 +60,8 @@ export async function POST(request: Request) {
         name,
         email,
         phone,
+        balance,
         address,
-        studentId,
-        className,
       },
     });
   } catch (error) {

@@ -9,9 +9,7 @@ type User = {
   name: string;
   email: string;
   phone: string;
-  address: string;
-  studentId: string;
-  className: string;
+  balance: number;
 };
 
 export default function ProfilePage() {
@@ -135,7 +133,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex gap-3">
-            <Link href="/" className="rounded-xl border border-slate-300 px-4 py-2 font-medium text-slate-700 hover:bg-slate-50">
+            <Link href="/dashboard" className="rounded-xl border border-slate-300 px-4 py-2 font-medium text-slate-700 hover:bg-slate-50">
               Trang chủ
             </Link>
             <button onClick={handleLogout} className="rounded-xl bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-700">
@@ -171,7 +169,7 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Email</label>
+                <label className="mb-2 block text-sm font-medium text-slate-700">Tên đăng nhập (email)</label>
                 <input value={user.email} disabled className="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500" />
               </div>
 
@@ -185,30 +183,8 @@ export default function ProfilePage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">MSSV</label>
-                <input
-                  value={user.studentId}
-                  onChange={(e) => setUser({ ...user, studentId: e.target.value })}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Lớp</label>
-                <input
-                  value={user.className}
-                  onChange={(e) => setUser({ ...user, className: e.target.value })}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="mb-2 block text-sm font-medium text-slate-700">Địa chỉ</label>
-                <input
-                  value={user.address}
-                  onChange={(e) => setUser({ ...user, address: e.target.value })}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
-                />
+                <label className="mb-2 block text-sm font-medium text-slate-700">Số dư tài khoản (VND)</label>
+                <input value={user.balance ?? 0} disabled className="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500" />
               </div>
             </div>
 
