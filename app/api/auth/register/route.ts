@@ -24,14 +24,11 @@ async function createUserInSupabase({ name, email, passwordHash, phone, balance,
     balance,
     address,
     created_at: new Date().toISOString(),
+    password: passwordHash,
   };
 
   if (passwordHash) {
     payload.password_hash = passwordHash;
-  }
-
-  if (!payload.password_hash) {
-    payload.password = passwordHash;
   }
 
   const { data, error } = await supabaseServer
